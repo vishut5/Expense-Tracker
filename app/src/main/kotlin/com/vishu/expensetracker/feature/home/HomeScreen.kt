@@ -219,6 +219,7 @@ fun CardItem(
                 painter = painterResource(id = R.drawable.dots_menu),
                 contentDescription = null,
                 modifier = Modifier.align(Alignment.CenterEnd)
+
             )
         }
 
