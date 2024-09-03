@@ -77,7 +77,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
                 }) {
                 Column(modifier = Modifier.align(Alignment.CenterStart)) {
                     ExpenseTextView(
-                        text = "Good Afternoon",
+                        text = "Hello",
                         style = Typography.bodyMedium,
                         color = Color.White
                     )
