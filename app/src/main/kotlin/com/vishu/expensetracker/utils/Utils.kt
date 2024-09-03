@@ -21,9 +21,9 @@ object Utils {
         return dateFormatter.format(dateInMillis)
     }
 
-    fun formatCurrency(amount: Double, locale: Locale = Locale.US): String {
+    fun formatCurrency(amount: Double, locale: Locale = Locale("en", "IN")): String {
         val currencyFormatter = NumberFormat.getCurrencyInstance(locale)
-        return currencyFormatter.format(amount)
+        return currencyFormatter.format(amount).replace("$", "₹")
     }
 
     fun formatDayMonthYear(dateInMillis: Long): String {

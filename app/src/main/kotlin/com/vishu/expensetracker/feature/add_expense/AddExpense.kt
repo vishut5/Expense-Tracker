@@ -194,7 +194,7 @@ fun DataForm(
                 amount.value = newValue.filter { it.isDigit() || it == '.' }
             },
             visualTransformation = { text ->
-                val out = "$" + text.text
+                val out = "₹" + text.text
                 val currencyOffsetTranslator = object : OffsetMapping {
                     override fun originalToTransformed(offset: Int): Int {
                         return offset + 1
