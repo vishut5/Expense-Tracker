@@ -96,7 +96,7 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
                         onClick = {
                             menuExpanded.value = false
                             // Navigate to settings screen
-                            // navController.navigate("settings_route")
+                             navController.navigate("/setting")
                         }
                     )
                 }

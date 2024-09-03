@@ -23,6 +23,8 @@ import androidx.navigation.compose.rememberNavController
 import com.vishu.expensetracker.feature.add_expense.AddExpense
 import com.vishu.expensetracker.feature.home.HomeScreen
 import com.vishu.expensetracker.feature.profile.ProfileScreen
+import com.vishu.expensetracker.feature.settings.AboutSection
+import com.vishu.expensetracker.feature.settings.SettingsScreen
 import com.vishu.expensetracker.feature.stats.StatsScreen
 import com.vishu.expensetracker.feature.transactionlist.TransactionListScreen
 import com.vishu.expensetracker.ui.theme.Zinc
@@ -76,6 +78,14 @@ fun NavHostScreen() {
             composable(route = "/profile") {
                 bottomBarVisibility = false // Hide the bottom bar on profile screen
                 ProfileScreen(navController)
+            }
+            composable(route = "/setting") {
+                bottomBarVisibility = false // Hide the bottom bar on profile screen
+               SettingsScreen(navController )
+            }
+            composable(route = "/about") {
+                bottomBarVisibility = false // Hide the bottom bar on profile screen
+                AboutSection(navController )
             }
         }
     }

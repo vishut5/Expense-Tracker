@@ -1,6 +1,7 @@
 package com.vishu.expensetracker.feature.profile
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -43,6 +44,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.vishu.expensetracker.R
 import com.vishu.expensetracker.ui.theme.Zinc
+import com.vishu.expensetracker.widget.ExpenseTextView
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,21 +57,32 @@ fun ProfileScreen(navController: NavController) {
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Profile", fontSize = 18.sp, fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_back),
-                            contentDescription = null,
-                            tint = Color.Black
-                        )
-                    }
-                }
+    Scaffold(topBar = {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_back),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .clickable {
+                        navController.navigateUp() // Navigate back to the previous screen
+                    },
+                colorFilter = ColorFilter.tint(Color.Black)
             )
-        },
+            ExpenseTextView(
+                text = "Profile",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.Center)
+            )
+        }
+    },
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
         Column(
