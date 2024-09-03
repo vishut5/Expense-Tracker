@@ -22,6 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.vishu.expensetracker.feature.add_expense.AddExpense
 import com.vishu.expensetracker.feature.home.HomeScreen
+import com.vishu.expensetracker.feature.profile.ProfileScreen
 import com.vishu.expensetracker.feature.stats.StatsScreen
 import com.vishu.expensetracker.feature.transactionlist.TransactionListScreen
 import com.vishu.expensetracker.ui.theme.Zinc
@@ -39,8 +40,9 @@ fun NavHostScreen() {
                 navController = navController,
                 items = listOf(
                     NavItem(route = "/home", icon = R.drawable.ic_home),
-                    NavItem(route = "/stats", icon = R.drawable.ic_stats)
-                )
+                    NavItem(route = "/stats", icon = R.drawable.ic_stats),
+
+                    )
             )
         }
     }) {
@@ -70,6 +72,10 @@ fun NavHostScreen() {
             composable(route = "/all_transactions") {
                 bottomBarVisibility = true // Show the bottom bar if you want it visible
                 TransactionListScreen(navController)
+            }
+            composable(route = "/profile") {
+                bottomBarVisibility = false // Hide the bottom bar on profile screen
+                ProfileScreen(navController)
             }
         }
     }

@@ -2,15 +2,20 @@ package com.vishu.expensetracker.feature.stats
 
 import android.view.LayoutInflater
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +42,7 @@ import com.vishu.expensetracker.widget.ExpenseTextView
 
 @Composable
 fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltViewModel()) {
+    val menuExpanded = remember { mutableStateOf(false) }
     Scaffold(topBar = {
         Box(
             modifier = Modifier
@@ -46,9 +52,11 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
             Image(
                 painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = null,
-                modifier = Modifier.align(
-                    Alignment.CenterStart
-                ),
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .clickable {
+                        navController.navigateUp() // Navigate back to the previous screen
+                    },
                 colorFilter = ColorFilter.tint(Color.Black)
             )
             ExpenseTextView(
@@ -59,12 +67,40 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
                     .padding(16.dp)
                     .align(Alignment.Center)
             )
-            Image(
-                painter = painterResource(id = R.drawable.dots_menu),
-                contentDescription = null,
-                modifier = Modifier.align(Alignment.CenterEnd),
-                colorFilter = ColorFilter.tint(Color.Black)
-            )
+            Box(modifier = Modifier.align(Alignment.CenterEnd)) {
+                Image(
+                    painter = painterResource(id = R.drawable.dots_menu),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+
+                        .clickable {
+                            menuExpanded.value = true // Expand the menu
+                        },
+                    colorFilter = ColorFilter.tint(Color.Black)
+                )
+                DropdownMenu(
+                    expanded = menuExpanded.value,
+                    onDismissRequest = { menuExpanded.value = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { ExpenseTextView(text = "Profile") },
+                        onClick = {
+                            menuExpanded.value = false
+                             //Navigate to profile screen
+                             navController.navigate("/profile")
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { ExpenseTextView(text = "Settings") },
+                        onClick = {
+                            menuExpanded.value = false
+                            // Navigate to settings screen
+                            // navController.navigate("settings_route")
+                        }
+                    )
+                }
+            }
         }
     }) {
         val dataState = viewModel.entries.collectAsState(emptyList())
