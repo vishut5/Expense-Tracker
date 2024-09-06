@@ -24,6 +24,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,8 +41,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.vishu.expensetracker.AuthViewModel
 import com.vishu.expensetracker.R
 import com.vishu.expensetracker.ui.theme.Zinc
 import com.vishu.expensetracker.widget.ExpenseTextView
@@ -49,13 +53,14 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(navController: NavController,  authViewModel: AuthViewModel = viewModel()) {
 
     var name by remember { mutableStateOf("Vishu Tyagi") }
     var email by remember { mutableStateOf("tyagivishu277@gmail.com") }
     var mobile by remember { mutableStateOf("7895484641") }
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val authState by authViewModel.authState.collectAsState()
 
     Scaffold(topBar = {
         Box(
@@ -143,14 +148,18 @@ fun ProfileScreen(navController: NavController) {
             Button(
                 onClick = {
                     coroutineScope.launch {
-                        snackbarHostState.showSnackbar("Profile updated successfully!")
+                        authViewModel.signOut()
+                        navController.navigate("/intro") {
+                            popUpTo("/profile") { inclusive = true }
+                        }
+                        snackbarHostState.showSnackbar("Logged out successfully!")
                     }
                 }, colors = ButtonDefaults.buttonColors(
                     containerColor = Zinc,
                     contentColor = Color.White
                 )
             ) {
-                Text(text = "Update")
+                Text(text = "LogOut")
             }
         }
     }

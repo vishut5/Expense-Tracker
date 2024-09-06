@@ -8,6 +8,8 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,11 +17,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.vishu.expensetracker.feature.IntroScreen
+import com.vishu.expensetracker.feature.SignInScreen
+import com.vishu.expensetracker.feature.SignUpScreen
 import com.vishu.expensetracker.feature.add_expense.AddExpense
 import com.vishu.expensetracker.feature.home.HomeScreen
 import com.vishu.expensetracker.feature.profile.ProfileScreen
@@ -30,12 +36,34 @@ import com.vishu.expensetracker.feature.transactionlist.TransactionListScreen
 import com.vishu.expensetracker.ui.theme.Zinc
 
 @Composable
-fun NavHostScreen() {
+fun NavHostScreen(authViewModel: AuthViewModel = hiltViewModel()) {
     val navController = rememberNavController()
     var bottomBarVisibility by remember {
-        mutableStateOf(true)
+        mutableStateOf(true)}
+        val authState by authViewModel.authState.collectAsState()
 
+    LaunchedEffect(authState) {
+        when (authState) {
+            is AuthState.Authenticated -> {
+                navController.navigate("/home") {
+
+                }
+            }
+
+            is AuthState.Error -> {
+                // Handle any error state if needed
+            }
+
+            else -> {
+                navController.navigate("/intro") {
+
+                }
+            }
+        }
     }
+
+
+
     Scaffold(bottomBar = {
         AnimatedVisibility(visible = bottomBarVisibility) {
             NavigationBottomBar(
@@ -50,9 +78,13 @@ fun NavHostScreen() {
     }) {
         NavHost(
             navController = navController,
-            startDestination = "/home",
+            startDestination = "/intro",
             modifier = Modifier.padding(it)
         ) {
+            composable(route = "/intro") {
+                bottomBarVisibility =false
+                IntroScreen(navController)
+            }
             composable(route = "/home") {
                 bottomBarVisibility = true
                 HomeScreen(navController)
@@ -86,6 +118,14 @@ fun NavHostScreen() {
             composable(route = "/about") {
                 bottomBarVisibility = false // Hide the bottom bar on profile screen
                 AboutSection(navController )
+            }
+            composable(route = "/signin") {
+                bottomBarVisibility = false // Hide the bottom bar on profile screen
+                SignInScreen(navController )
+            }
+            composable(route = "/signup") {
+                bottomBarVisibility = false // Hide the bottom bar on profile screen
+                SignUpScreen(navController )
             }
         }
     }
