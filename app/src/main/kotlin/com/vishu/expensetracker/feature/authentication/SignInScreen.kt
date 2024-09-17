@@ -1,9 +1,7 @@
-package com.vishu.expensetracker.feature
+package com.vishu.expensetracker.feature.authentication
 
-import android.provider.ContactsContract.CommonDataKinds.Email
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,22 +30,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.vishu.expensetracker.AuthState
-import com.vishu.expensetracker.AuthViewModel
+import com.vishu.expensetracker.viewmodel.AuthState
+import com.vishu.expensetracker.viewmodel.AuthViewModel
 import com.vishu.expensetracker.R
 import com.vishu.expensetracker.widget.ExpenseTextView
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hiltViewModel()) {
+fun SignInScreen(navController: NavController, authViewModel: AuthViewModel = hiltViewModel()) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
 
     val authState by authViewModel.authState.collectAsState()
     val context = LocalContext.current
-
 
     // Handle different auth states
     when (authState) {
@@ -55,24 +50,25 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
             // Show loading indicator
             CircularProgressIndicator()
         }
+
         is AuthState.Authenticated -> {
             // Navigate to home screen on successful authentication
             LaunchedEffect(Unit) {
-                Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
-                navController.navigate("/signin") {
-                    popUpTo("/signup") { inclusive = true }
+                Toast.makeText(context, "Signed in successfully!", Toast.LENGTH_LONG).show()
+                navController.navigate("/home") {
+                    popUpTo("/signin") { inclusive = true }
                 }
             }
         }
+
         is AuthState.Error -> {
             // Show error message
             val errorMessage = (authState as AuthState.Error).message
             Toast.makeText(LocalContext.current, errorMessage, Toast.LENGTH_LONG).show()
         }
+
         else -> Unit
     }
-
-
     Scaffold(
         topBar = {
             Box(
@@ -91,7 +87,7 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
                     colorFilter = ColorFilter.tint(Color.Black)
                 )
                 ExpenseTextView(
-                    text = "Sign Up",
+                    text = "Sign In",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier
@@ -130,23 +126,6 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
                         .padding(16.dp)
                         .fillMaxWidth()
                 ) {
-                    TextField(
-                        value = name,
-                        onValueChange = { name = it },
-                        label = { Text("Name") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color.White, // Background color
-                            focusedIndicatorColor = Color(0xFF25A969), // Hide line indicator
-                            unfocusedIndicatorColor = Color(0xFF25A969),
-                            focusedLabelColor = Color(0xFF25A969), // Green label color
-                            unfocusedLabelColor = Color(0xFF25A969), // Green label color
-
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
                     // Email Input
                     TextField(
                         value = email,
@@ -180,14 +159,16 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
                             focusedLabelColor = Color(0xFF25A969), // Green label color
                             unfocusedLabelColor = Color(0xFF25A969)
                         ),
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 0.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 0.dp)
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     // Sign In Button
                     Button(
-                        onClick = { authViewModel.signUp(email, password)},
+                        onClick = { authViewModel.signIn(email, password) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
@@ -195,7 +176,7 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF25A969))
                     ) {
-                        Text("Sign Up", fontSize = 18.sp)
+                        Text("Sign In", fontSize = 18.sp)
                     }
                 }
             }

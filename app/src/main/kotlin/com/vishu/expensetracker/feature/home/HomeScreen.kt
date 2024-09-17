@@ -52,12 +52,28 @@ import com.vishu.expensetracker.ui.theme.Red
 import com.vishu.expensetracker.ui.theme.Typography
 import com.vishu.expensetracker.ui.theme.Zinc
 import com.vishu.expensetracker.utils.Utils
+import com.vishu.expensetracker.viewmodel.AuthState
+import com.vishu.expensetracker.viewmodel.AuthViewModel
 import com.vishu.expensetracker.viewmodel.HomeViewModel
 import com.vishu.expensetracker.widget.ExpenseTextView
 
 
 @Composable
-fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    navController: NavController,
+    authViewModel: AuthViewModel = hiltViewModel(),
+    viewModel: HomeViewModel = hiltViewModel()
+) {
+    // Collect authentication state
+    val authState by authViewModel.authState.collectAsState()
+
+    // Retrieve the current user's name from FirebaseUser
+    val userName = if (authState is AuthState.Authenticated) {
+        (authState as AuthState.Authenticated).user.displayName ?: "Unknown"
+    } else {
+        "Guest"
+    }
+
     Surface(modifier = Modifier.fillMaxSize()) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (nameRow, list, card, topBar, add) = createRefs()
@@ -67,6 +83,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 })
+
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 64.dp, start = 16.dp, end = 16.dp)
@@ -82,7 +99,7 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = hiltView
                         color = Color.White
                     )
                     ExpenseTextView(
-                        text = "Vishu Tyagi",
+                        text = userName,
                         style = Typography.titleLarge,
                         color = Color.White
                     )

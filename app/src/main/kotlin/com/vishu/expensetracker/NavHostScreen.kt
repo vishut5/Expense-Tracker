@@ -23,8 +23,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.vishu.expensetracker.feature.IntroScreen
-import com.vishu.expensetracker.feature.SignInScreen
+import com.vishu.expensetracker.feature.authentication.IntroScreen
+import com.vishu.expensetracker.feature.authentication.SignInScreen
 import com.vishu.expensetracker.feature.SignUpScreen
 import com.vishu.expensetracker.feature.add_expense.AddExpense
 import com.vishu.expensetracker.feature.home.HomeScreen
@@ -34,103 +34,114 @@ import com.vishu.expensetracker.feature.settings.SettingsScreen
 import com.vishu.expensetracker.feature.stats.StatsScreen
 import com.vishu.expensetracker.feature.transactionlist.TransactionListScreen
 import com.vishu.expensetracker.ui.theme.Zinc
+import com.vishu.expensetracker.viewmodel.AuthState
+import com.vishu.expensetracker.viewmodel.AuthViewModel
 
 @Composable
 fun NavHostScreen(authViewModel: AuthViewModel = hiltViewModel()) {
     val navController = rememberNavController()
-    var bottomBarVisibility by remember {
-        mutableStateOf(true)}
-        val authState by authViewModel.authState.collectAsState()
+    var bottomBarVisibility by remember { mutableStateOf(true) }
+    var isAuthChecked by remember { mutableStateOf(false) }
 
-    LaunchedEffect(authState) {
-        when (authState) {
-            is AuthState.Authenticated -> {
-                navController.navigate("/home") {
+    val authState by authViewModel.authState.collectAsState()
 
+    // This effect ensures that we navigate only when authentication is checked and the NavHost is set up
+    LaunchedEffect(authState, isAuthChecked) {
+        if (isAuthChecked) {
+            when (authState) {
+                is AuthState.Authenticated -> {
+                    // Ensure navigation happens only if the nav graph is set up
+                    navController.navigate("/home") {
+                        popUpTo(0)
+                    }
                 }
-            }
-
-            is AuthState.Error -> {
-                // Handle any error state if needed
-            }
-
-            else -> {
-                navController.navigate("/intro") {
-
+                is AuthState.Error -> {
+                    // Handle error state if needed
+                }
+                else -> {
+                    navController.navigate("/intro") {
+                        popUpTo(0)
+                    }
                 }
             }
         }
     }
 
+    // Check authentication state before rendering
+    LaunchedEffect(Unit) {
+        // Delay building NavHost until auth state is verified
+        authViewModel.checkAuthStatus()
+        isAuthChecked = true
+    }
 
-
-    Scaffold(bottomBar = {
-        AnimatedVisibility(visible = bottomBarVisibility) {
-            NavigationBottomBar(
-                navController = navController,
-                items = listOf(
-                    NavItem(route = "/home", icon = R.drawable.ic_home),
-                    NavItem(route = "/stats", icon = R.drawable.ic_stats),
-
+    // Only render the scaffold and navigation once authentication is checked
+    if (isAuthChecked) {
+        Scaffold(
+            bottomBar = {
+                AnimatedVisibility(visible = bottomBarVisibility) {
+                    NavigationBottomBar(
+                        navController = navController,
+                        items = listOf(
+                            NavItem(route = "/home", icon = R.drawable.ic_home),
+                            NavItem(route = "/stats", icon = R.drawable.ic_stats)
+                        )
                     )
-            )
-        }
-    }) {
-        NavHost(
-            navController = navController,
-            startDestination = "/intro",
-            modifier = Modifier.padding(it)
+                }
+            }
         ) {
-            composable(route = "/intro") {
-                bottomBarVisibility =false
-                IntroScreen(navController)
-            }
-            composable(route = "/home") {
-                bottomBarVisibility = true
-                HomeScreen(navController)
-            }
-
-            composable(route = "/add_income") {
-                bottomBarVisibility = false
-                AddExpense(navController, isIncome = true)
-            }
-            composable(route = "/add_exp") {
-                bottomBarVisibility = false
-                AddExpense(navController, isIncome = false)
-            }
-
-            composable(route = "/stats") {
-                bottomBarVisibility = true
-                StatsScreen(navController)
-            }
-            composable(route = "/all_transactions") {
-                bottomBarVisibility = true // Show the bottom bar if you want it visible
-                TransactionListScreen(navController)
-            }
-            composable(route = "/profile") {
-                bottomBarVisibility = false // Hide the bottom bar on profile screen
-                ProfileScreen(navController)
-            }
-            composable(route = "/setting") {
-                bottomBarVisibility = false // Hide the bottom bar on profile screen
-               SettingsScreen(navController )
-            }
-            composable(route = "/about") {
-                bottomBarVisibility = false // Hide the bottom bar on profile screen
-                AboutSection(navController )
-            }
-            composable(route = "/signin") {
-                bottomBarVisibility = false // Hide the bottom bar on profile screen
-                SignInScreen(navController )
-            }
-            composable(route = "/signup") {
-                bottomBarVisibility = false // Hide the bottom bar on profile screen
-                SignUpScreen(navController )
+            NavHost(
+                navController = navController,
+                startDestination = if (authState is AuthState.Authenticated) "/home" else "/intro",
+                modifier = Modifier.padding(it)
+            ) {
+                composable(route = "/intro") {
+                    bottomBarVisibility = false
+                    IntroScreen(navController)
+                }
+                composable(route = "/home") {
+                    bottomBarVisibility = true
+                    HomeScreen(navController)
+                }
+                composable(route = "/add_income") {
+                    bottomBarVisibility = false
+                    AddExpense(navController, isIncome = true)
+                }
+                composable(route = "/add_exp") {
+                    bottomBarVisibility = false
+                    AddExpense(navController, isIncome = false)
+                }
+                composable(route = "/stats") {
+                    bottomBarVisibility = true
+                    StatsScreen(navController)
+                }
+                composable(route = "/all_transactions") {
+                    bottomBarVisibility = true
+                    TransactionListScreen(navController)
+                }
+                composable(route = "/profile") {
+                    bottomBarVisibility = false
+                    ProfileScreen(navController)
+                }
+                composable(route = "/setting") {
+                    bottomBarVisibility = false
+                    SettingsScreen(navController)
+                }
+                composable(route = "/about") {
+                    bottomBarVisibility = false
+                    AboutSection(navController)
+                }
+                composable(route = "/signin") {
+                    bottomBarVisibility = false
+                    SignInScreen(navController)
+                }
+                composable(route = "/signup") {
+                    bottomBarVisibility = false
+                    SignUpScreen(navController)
+                }
             }
         }
     }
 }
-
 
 data class NavItem(
     val route: String,

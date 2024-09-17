@@ -1,9 +1,7 @@
 package com.vishu.expensetracker.feature
 
-import android.provider.ContactsContract.CommonDataKinds.Email
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,19 +30,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.vishu.expensetracker.AuthState
-import com.vishu.expensetracker.AuthViewModel
+import com.vishu.expensetracker.viewmodel.AuthState
+import com.vishu.expensetracker.viewmodel.AuthViewModel
 import com.vishu.expensetracker.R
 import com.vishu.expensetracker.widget.ExpenseTextView
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen(navController: NavController, authViewModel: AuthViewModel = hiltViewModel()) {
+fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hiltViewModel()) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
 
     val authState by authViewModel.authState.collectAsState()
     val context = LocalContext.current
+
 
     // Handle different auth states
     when (authState) {
@@ -52,48 +53,54 @@ fun SignInScreen(navController: NavController, authViewModel: AuthViewModel = hi
             // Show loading indicator
             CircularProgressIndicator()
         }
+
         is AuthState.Authenticated -> {
             // Navigate to home screen on successful authentication
             LaunchedEffect(Unit) {
-                Toast.makeText(context, "Signed in successfully!", Toast.LENGTH_LONG).show()
-                navController.navigate("/home") {
-                    popUpTo("/signin") { inclusive = true }
+                Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
+                navController.navigate("/signin") {
+                    popUpTo("/signup") { inclusive = true }
                 }
             }
         }
+
         is AuthState.Error -> {
             // Show error message
             val errorMessage = (authState as AuthState.Error).message
             Toast.makeText(LocalContext.current, errorMessage, Toast.LENGTH_LONG).show()
         }
+
         else -> Unit
     }
-    Scaffold(topBar = {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_back),
-                contentDescription = null,
+
+
+    Scaffold(
+        topBar = {
+            Box(
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .clickable {
-                        navController.navigateUp() // Navigate back to the previous screen
-                    },
-                colorFilter = ColorFilter.tint(Color.Black)
-            )
-            ExpenseTextView(
-                text = "Sign In",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.Center)
-            )
-        }
-    },
+                    .fillMaxWidth()
+                    .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_back),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .clickable {
+                            navController.navigateUp() // Navigate back to the previous screen
+                        },
+                    colorFilter = ColorFilter.tint(Color.Black)
+                )
+                ExpenseTextView(
+                    text = "Sign Up",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.Center)
+                )
+            }
+        },
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -104,7 +111,7 @@ fun SignInScreen(navController: NavController, authViewModel: AuthViewModel = hi
             // Description Text
             Text(
                 text = "Enter your name, email id and password, to register with us.",
-                color = Color(0xFF666666), // secondary_text_color
+                color = Color(0xFF666666),
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -124,10 +131,27 @@ fun SignInScreen(navController: NavController, authViewModel: AuthViewModel = hi
                         .padding(16.dp)
                         .fillMaxWidth()
                 ) {
+                    TextField(
+                        value = name,
+                        onValueChange = { name = it },
+                        label = { Text("Name") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        colors = TextFieldDefaults.textFieldColors(
+                            containerColor = Color.White, // Background color
+                            focusedIndicatorColor = Color(0xFF25A969), // Hide line indicator
+                            unfocusedIndicatorColor = Color(0xFF25A969),
+                            focusedLabelColor = Color(0xFF25A969), // Green label color
+                            unfocusedLabelColor = Color(0xFF25A969), // Green label color
+
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
                     // Email Input
                     TextField(
                         value = email,
-                        onValueChange = {email= it},
+                        onValueChange = { email = it },
                         label = { Text("Email") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.textFieldColors(
@@ -146,7 +170,7 @@ fun SignInScreen(navController: NavController, authViewModel: AuthViewModel = hi
                     // Password Input
                     TextField(
                         value = password,
-                        onValueChange = {password = it},
+                        onValueChange = { password = it },
                         label = { Text("Password") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                         visualTransformation = PasswordVisualTransformation(),
@@ -157,14 +181,16 @@ fun SignInScreen(navController: NavController, authViewModel: AuthViewModel = hi
                             focusedLabelColor = Color(0xFF25A969), // Green label color
                             unfocusedLabelColor = Color(0xFF25A969)
                         ),
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 0.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 0.dp)
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     // Sign In Button
                     Button(
-                        onClick = {authViewModel.signIn(email, password)  },
+                        onClick = { authViewModel.signUp(email, password, name) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp)
@@ -172,7 +198,7 @@ fun SignInScreen(navController: NavController, authViewModel: AuthViewModel = hi
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF25A969))
                     ) {
-                        Text("Sign In", fontSize = 18.sp)
+                        Text("Sign Up", fontSize = 18.sp)
                     }
                 }
             }
