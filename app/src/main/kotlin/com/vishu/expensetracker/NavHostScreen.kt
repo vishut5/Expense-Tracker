@@ -45,18 +45,18 @@ fun NavHostScreen(authViewModel: AuthViewModel = hiltViewModel()) {
 
     val authState by authViewModel.authState.collectAsState()
 
-    // This effect ensures that we navigate only when authentication is checked and the NavHost is set up
+
     LaunchedEffect(authState, isAuthChecked) {
         if (isAuthChecked) {
             when (authState) {
                 is AuthState.Authenticated -> {
-                    // Ensure navigation happens only if the nav graph is set up
+
                     navController.navigate("/home") {
                         popUpTo(0)
                     }
                 }
                 is AuthState.Error -> {
-                    // Handle error state if needed
+
                 }
                 else -> {
                     navController.navigate("/intro") {
@@ -67,14 +67,14 @@ fun NavHostScreen(authViewModel: AuthViewModel = hiltViewModel()) {
         }
     }
 
-    // Check authentication state before rendering
+
     LaunchedEffect(Unit) {
-        // Delay building NavHost until auth state is verified
+
         authViewModel.checkAuthStatus()
         isAuthChecked = true
     }
 
-    // Only render the scaffold and navigation once authentication is checked
+
     if (isAuthChecked) {
         Scaffold(
             bottomBar = {
@@ -153,7 +153,7 @@ fun NavigationBottomBar(
     navController: NavController,
     items: List<NavItem>,
 ) {
-    // Bottom Navigation Bar
+
     val navBackStackEntry = navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry.value?.destination?.route
 
@@ -184,3 +184,6 @@ fun NavigationBottomBar(
         }
     }
 }
+
+
+

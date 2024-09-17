@@ -44,14 +44,14 @@ fun SettingsScreen(navController: NavController) {
     val showPermissionMessage = remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    // Dialog to inform the user about dark mode and navigate to system settings
+
     if (showPermissionMessage.value) {
         PermissionMessageDialog(
             onDismiss = { showPermissionMessage.value = false },
             onOpenSettings = {
-                // Navigate to the system settings screen for display options
+
                 val intent = Intent(Settings.ACTION_DISPLAY_SETTINGS)
-                context.startActivity(intent) // Use the context directly
+                context.startActivity(intent)
             }
         )
     }
@@ -68,7 +68,7 @@ fun SettingsScreen(navController: NavController) {
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .clickable {
-                            navController.navigateUp() // Navigate back to the previous screen
+                            navController.navigateUp()
                         },
                     colorFilter = ColorFilter.tint(Color.Black)
                 )
@@ -96,7 +96,7 @@ fun SettingsScreen(navController: NavController) {
 
             Divider(color = Color.LightGray)
 
-            // Example setting: Dark Mode
+
             val darkModeEnabled = remember { mutableStateOf(false) }
             SettingItem(
                 title = "Dark Mode",
@@ -108,22 +108,22 @@ fun SettingsScreen(navController: NavController) {
 
             Divider(color = Color.LightGray)
 
-            // Example setting: Account
+
             SettingNavigationItem(
                 title = "Account",
                 onClick = {
-                    // Navigate to account settings screen
+
                     navController.navigate("/profile")
                 }
             )
 
             Divider(color = Color.LightGray)
 
-            // Example setting: About
+
             SettingNavigationItem(
                 title = "About",
                 onClick = {
-                    // Navigate to about screen
+
                     navController.navigate("/about")
                 }
             )
@@ -208,7 +208,7 @@ fun AboutSection(navController: NavController) {
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .clickable {
-                        navController.navigateUp() // Navigate back to the previous screen
+                        navController.navigateUp()
                     },
                 colorFilter = ColorFilter.tint(Color.Black)
             )

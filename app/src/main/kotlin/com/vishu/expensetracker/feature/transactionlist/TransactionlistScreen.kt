@@ -58,7 +58,6 @@ fun TransactionListScreen(
     }
 
     val filteredByDateRange = filteredTransactions.filter { transaction ->
-        // Apply date range filter logic here
         true
     }
 
@@ -69,7 +68,7 @@ fun TransactionListScreen(
                     .fillMaxWidth()
                     .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
             ) {
-                // Back Button
+
                 Image(
                     painter = painterResource(id = R.drawable.ic_back),
                     contentDescription = "Back",
@@ -79,7 +78,7 @@ fun TransactionListScreen(
                     colorFilter = ColorFilter.tint(Color.Black)
                 )
 
-                // Title
+
                 ExpenseTextView(
                     text = "Transactions",
                     fontSize = 18.sp,
@@ -89,7 +88,7 @@ fun TransactionListScreen(
                         .align(Alignment.Center)
                 )
 
-                // Three Dots Menu
+
                 Image(
                     painter = painterResource(id = R.drawable.ic_filter),
                     contentDescription = null,
@@ -102,7 +101,7 @@ fun TransactionListScreen(
         }
     ) { paddingValues ->
         Box(modifier = Modifier.fillMaxSize()) {
-            // Content area for the transaction list
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -110,7 +109,7 @@ fun TransactionListScreen(
                     .padding(horizontal = 16.dp)
             ) {
                 item {
-                    // Dropdowns
+
                     AnimatedVisibility(
                         visible = menuExpanded,
                         enter = slideInVertically(initialOffsetY = { -it / 2 }),
@@ -118,7 +117,7 @@ fun TransactionListScreen(
                         modifier = Modifier.padding(8.dp)
                     ) {
                         Column {
-                            // Type Filter Dropdown
+
                             ExpenseDropDown(
                                 listOfItems = listOf("All", "Expense", "Income"),
                                 onItemSelected = { selected ->
@@ -129,7 +128,7 @@ fun TransactionListScreen(
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            // Date Range Filter Dropdown
+
                             ExpenseDropDown(
                                 listOfItems = listOf(
                                     "Yesterday",
@@ -140,7 +139,7 @@ fun TransactionListScreen(
                                 ),
                                 onItemSelected = { selected ->
                                     dateRange = selected
-                                    menuExpanded = false // Close menu after selection
+                                    menuExpanded = false
                                 }
                             )
                         }

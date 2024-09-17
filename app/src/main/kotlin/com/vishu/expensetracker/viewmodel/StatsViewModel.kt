@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StatsViewModel @Inject constructor(private val dao: ExpenseDao) : ViewModel() {
-    // LiveData or StateFlow could be used here depending on your implementation
+
     val entries = dao.getAllExpenseByDate()
     val topEntries = dao.getTopExpenses()
 

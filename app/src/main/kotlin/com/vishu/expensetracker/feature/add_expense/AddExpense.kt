@@ -91,7 +91,7 @@ fun AddExpense(
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .clickable {
-                            navController.popBackStack() // Navigate back
+                            navController.popBackStack()
                         })
                 ExpenseTextView(
                     text = "Add ${if (isIncome) "Income" else "Expense"}",

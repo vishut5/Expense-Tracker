@@ -64,10 +64,9 @@ fun HomeScreen(
     authViewModel: AuthViewModel = hiltViewModel(),
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    // Collect authentication state
+
     val authState by authViewModel.authState.collectAsState()
 
-    // Retrieve the current user's name from FirebaseUser
     val userName = if (authState is AuthState.Authenticated) {
         (authState as AuthState.Authenticated).user.displayName ?: "Unknown"
     } else {
@@ -158,7 +157,7 @@ fun MultiFloatingActionButton(modifier: Modifier, navController: NavController) 
             horizontalAlignment = Alignment.End,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Secondary FABs
+
             AnimatedVisibility(visible = expanded) {
                 Column(horizontalAlignment = Alignment.End) {
                     SmallFloatingActionButton(
@@ -186,7 +185,7 @@ fun MultiFloatingActionButton(modifier: Modifier, navController: NavController) 
                 }
             }
 
-            // Main FAB
+
             SmallFloatingActionButton(
                 onClick = {
                     expanded = !expanded

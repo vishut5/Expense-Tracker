@@ -53,7 +53,7 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
             """.trimIndent()
         )
 
-        // Step 2: Copy the data from the old table to the new table
+
         db.execSQL(
             """
             INSERT INTO expense_table_new (id, title, amount, date, type)
@@ -61,10 +61,10 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
             """.trimIndent()
         )
 
-        // Step 3: Drop the old table
+
         db.execSQL("DROP TABLE expense_table")
 
-        // Step 4: Rename the new table to the original table name
+
         db.execSQL("ALTER TABLE expense_table_new RENAME TO expense_table")
     }
 }

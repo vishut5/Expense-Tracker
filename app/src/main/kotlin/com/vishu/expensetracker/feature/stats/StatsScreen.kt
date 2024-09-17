@@ -55,7 +55,7 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .clickable {
-                        navController.navigateUp() // Navigate back to the previous screen
+                        navController.navigateUp()
                     },
                 colorFilter = ColorFilter.tint(Color.Black)
             )
@@ -75,7 +75,7 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
                         .align(Alignment.CenterEnd)
 
                         .clickable {
-                            menuExpanded.value = true // Expand the menu
+                            menuExpanded.value = true
                         },
                     colorFilter = ColorFilter.tint(Color.Black)
                 )
@@ -87,7 +87,7 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
                         text = { ExpenseTextView(text = "Profile") },
                         onClick = {
                             menuExpanded.value = false
-                             //Navigate to profile screen
+
                              navController.navigate("/profile")
                         }
                     )
@@ -95,7 +95,7 @@ fun StatsScreen(navController: NavController, viewModel: StatsViewModel = hiltVi
                         text = { ExpenseTextView(text = "Settings") },
                         onClick = {
                             menuExpanded.value = false
-                            // Navigate to settings screen
+
                              navController.navigate("/setting")
                         }
                     )

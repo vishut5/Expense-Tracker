@@ -47,15 +47,15 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
     val context = LocalContext.current
 
 
-    // Handle different auth states
+
     when (authState) {
         is AuthState.Loading -> {
-            // Show loading indicator
+
             CircularProgressIndicator()
         }
 
         is AuthState.Authenticated -> {
-            // Navigate to home screen on successful authentication
+
             LaunchedEffect(Unit) {
                 Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
                 navController.navigate("/signin") {
@@ -65,7 +65,7 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
         }
 
         is AuthState.Error -> {
-            // Show error message
+
             val errorMessage = (authState as AuthState.Error).message
             Toast.makeText(LocalContext.current, errorMessage, Toast.LENGTH_LONG).show()
         }
@@ -87,7 +87,7 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .clickable {
-                            navController.navigateUp() // Navigate back to the previous screen
+                            navController.navigateUp()
                         },
                     colorFilter = ColorFilter.tint(Color.Black)
                 )
@@ -108,7 +108,7 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
                 .padding(paddingValues)
                 .padding(horizontal = 16.dp, vertical = 32.dp)
         ) {
-            // Description Text
+
             Text(
                 text = "Enter your name, email id and password, to register with us.",
                 color = Color(0xFF666666),
@@ -119,7 +119,7 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
                     .padding(bottom = 24.dp)
             )
 
-            // CardView equivalent
+
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(8.dp),
@@ -137,29 +137,29 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
                         label = { Text("Name") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color.White, // Background color
-                            focusedIndicatorColor = Color(0xFF25A969), // Hide line indicator
+                            containerColor = Color.White,
+                            focusedIndicatorColor = Color(0xFF25A969),
                             unfocusedIndicatorColor = Color(0xFF25A969),
-                            focusedLabelColor = Color(0xFF25A969), // Green label color
-                            unfocusedLabelColor = Color(0xFF25A969), // Green label color
+                            focusedLabelColor = Color(0xFF25A969),
+                            unfocusedLabelColor = Color(0xFF25A969),
 
                         ),
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
-                    // Email Input
+
                     TextField(
                         value = email,
                         onValueChange = { email = it },
                         label = { Text("Email") },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                         colors = TextFieldDefaults.textFieldColors(
-                            containerColor = Color.White, // Background color
-                            focusedIndicatorColor = Color(0xFF25A969), // Hide line indicator
+                            containerColor = Color.White,
+                            focusedIndicatorColor = Color(0xFF25A969),
                             unfocusedIndicatorColor = Color(0xFF25A969),
-                            focusedLabelColor = Color(0xFF25A969), // Green label color
-                            unfocusedLabelColor = Color(0xFF25A969), // Green label color
+                            focusedLabelColor = Color(0xFF25A969),
+                            unfocusedLabelColor = Color(0xFF25A969),
 
                         ),
                         modifier = Modifier.fillMaxWidth()
@@ -176,9 +176,9 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
                         visualTransformation = PasswordVisualTransformation(),
                         colors = TextFieldDefaults.textFieldColors(
                             containerColor = Color.White,
-                            focusedIndicatorColor = Color(0xFF25A969), // Hide line indicator
+                            focusedIndicatorColor = Color(0xFF25A969),
                             unfocusedIndicatorColor = Color(0xFF25A969),
-                            focusedLabelColor = Color(0xFF25A969), // Green label color
+                            focusedLabelColor = Color(0xFF25A969),
                             unfocusedLabelColor = Color(0xFF25A969)
                         ),
                         modifier = Modifier
@@ -188,7 +188,7 @@ fun SignUpScreen(navController: NavController, authViewModel: AuthViewModel = hi
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // Sign In Button
+
                     Button(
                         onClick = { authViewModel.signUp(email, password, name) },
                         modifier = Modifier

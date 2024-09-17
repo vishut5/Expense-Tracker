@@ -30,14 +30,13 @@ val customFontFamily2 = FontFamily(
     Font(R.font.inter_medium)
 )
 
-    @Composable
+@Composable
 fun IntroScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
 
     ) {
-        // Background Image
 
 
         Column(
@@ -47,19 +46,19 @@ fun IntroScreen(navController: NavController) {
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // App Name Text
+
             Text(
                 text = "EXPENSE TRACKER",
-                color = Color(0xFF25A969), // colorAccent
-                fontSize = 35.sp, // Adjust based on your dimensions
+                color = Color(0xFF25A969),
+                fontSize = 35.sp,
                 fontWeight = FontWeight.Bold,
                 fontFamily = customFontFamily,
                 modifier = Modifier.padding(top = 32.dp),
 
-            )
+                )
             Spacer(modifier = Modifier.height(50.dp))
 
-            // Image
+
             Image(
                 painter = painterResource(id = R.drawable.introapp),
                 contentDescription = "Intro Image",
@@ -69,19 +68,19 @@ fun IntroScreen(navController: NavController) {
                 contentScale = ContentScale.Fit
             )
             Spacer(modifier = Modifier.height(30.dp))
-            // Let's Get Started Text
+
             Text(
                 text = "Let's Get Started",
-                color = Color(0xFF333333), // primary_text_color
+                color = Color(0xFF333333),
                 fontSize = 24.sp,
                 modifier = Modifier.padding(top = 16.dp),
                 fontFamily = customFontFamily2
             )
 
-            // Description Text
+
             Text(
                 text = "Track your expenses and manage your budget easily with our intuitive and minimalist interface.",
-                color = Color(0xFF666666), // secondary_text_color
+                color = Color(0xFF666666),
                 fontSize = 16.sp,
                 lineHeight = 20.sp,
                 modifier = Modifier
@@ -91,7 +90,7 @@ fun IntroScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(15.dp))
 
-            // Sign In Button
+
             Button(
                 onClick = { navController.navigate("/signin") },
                 modifier = Modifier
@@ -99,7 +98,7 @@ fun IntroScreen(navController: NavController) {
                     .padding(horizontal = 16.dp)
                     .padding(top = 16.dp),
                 shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF25A969)) // colorAccent
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF25A969))
             ) {
                 Text(
                     text = "SIGN IN",
@@ -110,7 +109,7 @@ fun IntroScreen(navController: NavController) {
             }
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Sign Up Button
+
             Button(
                 onClick = { navController.navigate("/signup") },
                 modifier = Modifier
@@ -118,12 +117,12 @@ fun IntroScreen(navController: NavController) {
                     .padding(horizontal = 16.dp)
                     .padding(top = 8.dp),
                 shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(1.dp, Color(0xFF25A969)), // Green border
+                border = BorderStroke(1.dp, Color(0xFF25A969)),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
                 Text(
                     text = "SIGN UP",
-                    color = Color(0xFF25A969), // colorAccent
+                    color = Color(0xFF25A969),
                     fontSize = 18.sp,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )

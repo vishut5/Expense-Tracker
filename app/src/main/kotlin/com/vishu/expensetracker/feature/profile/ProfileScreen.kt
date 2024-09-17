@@ -70,7 +70,7 @@ fun ProfileScreen(navController: NavController,  authViewModel: AuthViewModel = 
                 modifier = Modifier
                     .align(Alignment.CenterStart)
                     .clickable {
-                        navController.navigateUp() // Navigate back to the previous screen
+                        navController.navigateUp()
                     },
                 colorFilter = ColorFilter.tint(Color.Black)
             )
@@ -93,7 +93,7 @@ fun ProfileScreen(navController: NavController,  authViewModel: AuthViewModel = 
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Profile Image
+
             Box(
                 modifier = Modifier
                     .size(140.dp)
@@ -108,7 +108,7 @@ fun ProfileScreen(navController: NavController,  authViewModel: AuthViewModel = 
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Name Field
+
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
@@ -118,7 +118,7 @@ fun ProfileScreen(navController: NavController,  authViewModel: AuthViewModel = 
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Email Field
+
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -129,7 +129,7 @@ fun ProfileScreen(navController: NavController,  authViewModel: AuthViewModel = 
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Mobile Field
+
             OutlinedTextField(
                 value = mobile,
                 onValueChange = { mobile = it },
@@ -140,7 +140,7 @@ fun ProfileScreen(navController: NavController,  authViewModel: AuthViewModel = 
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Update Button
+
             Button(
                 onClick = {
                     coroutineScope.launch {
